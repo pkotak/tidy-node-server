@@ -24,6 +24,8 @@ app.get('/', function (req, res) {
 });
 
 let userService = require('./service/user.service.server');
+let taskService = require('./service/task.service.server');
 userService(app);
+taskService(app);
 
 app.listen(process.env.PORT);
