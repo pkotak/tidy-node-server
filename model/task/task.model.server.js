@@ -16,8 +16,7 @@ function findAllTasks() {
 }
 
 function updateTask(id, task) {
-    return taskModel.updateOne({_id: id},
-        task);
+    return taskModel.updateOne({_id: id}, task);
 }
 
 function findByTaskName(taskname) {

@@ -3,7 +3,9 @@ module.exports = function (app) {
     app.get('/api/task/:id', findTaskById);
     app.post('/api/task', createTask);
     app.delete('/api/task/:id', deleteTask)
+    app.put('/api/task/:id/complete', markTaskAsComplete)
     let taskModel = require('../model/task/task.model.server');
+    let userModel = require('../model/user/user.model.server');
 
     function findAllTasks(req, res) {
         taskModel.findAllTasks()
@@ -38,12 +40,33 @@ module.exports = function (app) {
         )
     }
 
-
     function deleteTask(req, res) {
         let id = req.params['id'];
         taskModel.deleteTask(id).then(response => {
             res.send(response);
         });
+    }
+
+    function markTaskAsComplete(req, res) {
+        let id = req.params['id'];
+        let user_body = req.body;
+        taskModel.findTaskById(id)
+            .then(task => {
+                userModel.findByUserName(user_body.username)
+                    .then(user => {
+                        let match_task = task._id.toString() === user.task.toString();
+                        if (user.password === user_body.password && match_task) {
+                            task.isComplete = true;
+                            taskModel.updateTask(id, task)
+                                .then(x => {
+                                    res.sendStatus(200);
+                                });
+                        }
+                        else {
+                            res.sendStatus(500);
+                        }
+                    })
+            })
     }
 }
 

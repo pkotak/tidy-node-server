@@ -28,4 +28,4 @@ let taskService = require('./service/task.service.server');
 userService(app);
 taskService(app);
 
-app.listen(process.env.PORT);
+app.listen(process.env.PORT || 5000);
