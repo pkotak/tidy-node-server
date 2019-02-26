@@ -52,21 +52,27 @@ module.exports = function (app) {
         let user_body = req.body;
         taskModel.findTaskById(id)
             .then(task => {
-                userModel.findByUserName(user_body.username)
-                    .then(user => {
-                        let match_task = task._id.toString() === user.task.toString();
-                        if (user.password === user_body.password && match_task) {
-                            task.isComplete = true;
-                            taskModel.updateTask(id, task)
-                                .then(x => {
-                                    res.sendStatus(200);
-                                });
-                        }
-                        else {
-                            res.sendStatus(500);
-                        }
-                    })
+                userTask(task, user_body, id).then(status => {
+                    res.sendStatus(status);
+                })
+
             })
+    }
+
+    function userTask(task, user_body, id) {
+        return new Promise((resolve) => {
+            userModel.findByUserName(user_body.username)
+                .then(user => {
+                    let match_task = task._id.toString() === user.task.toString();
+                    if (user.password === user_body.password && match_task) {
+                        task.isComplete = true;
+                        taskModel.updateTask(id, task)
+                            .then(resolve(200));
+                    }
+                    else
+                        resolve(500);
+                })
+        });
     }
 }
 

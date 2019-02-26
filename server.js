@@ -7,7 +7,7 @@ let app = express();
 
 
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.urlencoded({extended: true, useNewUrlParser: true}));
 
 const CLIENT_URL = "http://localhost:3000";
 
