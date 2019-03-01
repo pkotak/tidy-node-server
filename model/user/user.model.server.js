@@ -16,24 +16,28 @@ function findAllUsers() {
 }
 
 function updateUser(id, user) {
-    return userModel.updateOne({_id: id},
-        user);
+    return userModel.updateOne({_id: id}, user);
 }
 
 function findByUserName(username) {
     return userModel.findOne({username: username});
 }
 
+function findByGroup(group) {
+    return userModel.find({group: group});
+}
+
 function deleteUser(id){
     return userModel.deleteOne({_id:id})
 }
 
-var api = {
+let api = {
     createUser: createUser,
     findAllUsers: findAllUsers,
     findUserById: findUserById,
     updateUser: updateUser,
     findByUserName: findByUserName,
+    findByGroup: findByGroup,
     deleteUser: deleteUser
 };
 

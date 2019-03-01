@@ -1,7 +1,8 @@
 module.exports = function (app) {
     app.get('/api/user', findAllUsers);
     app.get('/api/user/:id', findUserById);
-    app.get('/api/user/:username', findByUserName);
+    app.get('/api/user/group/:group', findUserByGroup);
+    app.get('/api/user/username/:username', findByUserName);
     app.post('/api/user', createUser);
     app.put('/api/user/:id/task', updateTask);
     app.delete('/api/user/:id', deleteUser)
@@ -17,6 +18,14 @@ module.exports = function (app) {
     function findUserById(req, res) {
         var id = req.params['id'];
         userModel.findUserById(id)
+            .then(function (user) {
+                res.json(user);
+            })
+    }
+
+    function findUserByGroup(req, res) {
+        var group = req.params['group'];
+        userModel.findByGroup(group)
             .then(function (user) {
                 res.json(user);
             })
