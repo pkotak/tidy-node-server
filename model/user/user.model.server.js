@@ -12,7 +12,9 @@ function createUser(user) {
 
 
 function findAllUsers() {
-    return userModel.find();
+    return userModel.find()
+        .populate('task')
+        .populate('previous_task');
 }
 
 function updateUser(id, user) {
