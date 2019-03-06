@@ -26,7 +26,9 @@ app.get('/', function (req, res) {
 
 let userService = require('./service/user.service.server');
 let taskService = require('./service/task.service.server');
+let weekService = require('./service/weekly_status.service.server')
 userService(app, nodemailer);
 taskService(app);
+weekService(app);
 
 app.listen(process.env.PORT || 5000);
