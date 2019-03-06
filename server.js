@@ -1,5 +1,6 @@
 let express = require('express');
 let bodyParser = require('body-parser');
+let nodemailer = require('nodemailer');
 const mongoose = require('mongoose');
 mongoose.connect('mongodb://' + process.env.DBUSERNAME + ':' + process.env.DBPASSWORD + '@ds249035.mlab.com:49035/tidy');
 
@@ -25,7 +26,7 @@ app.get('/', function (req, res) {
 
 let userService = require('./service/user.service.server');
 let taskService = require('./service/task.service.server');
-userService(app);
+userService(app, nodemailer);
 taskService(app);
 
 app.listen(process.env.PORT || 5000);

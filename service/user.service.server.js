@@ -1,12 +1,38 @@
-module.exports = function (app) {
+module.exports = function (app, nodemailer) {
     app.get('/api/user', findAllUsers);
     app.get('/api/user/:id', findUserById);
     app.get('/api/user/group/:group', findUserByGroup);
     app.get('/api/user/username/:username', findByUserName);
+    app.get('/api/email', sendEmail)
     app.post('/api/user', createUser);
     app.put('/api/user/:id/task', updateTask);
     app.delete('/api/user/:id', deleteUser)
     let userModel = require('../model/user/user.model.server');
+    let transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+            user: process.env.EMAILUSERNAME,
+            pass: process.env.EMAILPASS
+        }
+    });
+
+    function sendEmail(req, res) {
+        let mailOptions = {
+            from: 'team212updates@gmail.com',
+            to: 'paarthkotak@gmail.com',
+            subject: 'Sending Email using Node.js',
+            text: 'That was easy!'
+        };
+
+        transporter.sendMail(mailOptions, function(error, info){
+            if (error) {
+                console.log(error);
+            } else {
+                console.log('Email sent: ' + info.response);
+                res.sendStatus(200);
+            }
+        });
+    }
 
     function findAllUsers(req, res) {
         userModel.findAllUsers()
